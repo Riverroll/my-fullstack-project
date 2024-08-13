@@ -19,15 +19,18 @@ const LoginForm: React.FC = () => {
   const initialValues: LoginFormValues = { email: '', password: '' };
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
+  const [notificationSeverity, setNotificationSeverity] = useState<'error' | 'success' >('success');
 
   const handleLogin = (values: LoginFormValues) => {
     axios.post('http://localhost:5001/login', values)
       .then(response => {
         setNotificationMessage('Login successful!');
+        setNotificationSeverity('success');
         setNotificationOpen(true);
       })
       .catch(error => {
         setNotificationMessage('Login failed!');
+        setNotificationSeverity('error')
         setNotificationOpen(true);
         console.error('Error:', error.response?.data || error.message);
       });
@@ -90,6 +93,7 @@ const LoginForm: React.FC = () => {
         </Formik>
         <Notification
           message={notificationMessage}
+          severity={notificationSeverity}
           open={notificationOpen}
           onClose={() => setNotificationOpen(false)}
         />
